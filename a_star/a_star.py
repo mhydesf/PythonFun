@@ -69,7 +69,7 @@ class AStar:
                 plt.pause(0.000001)
 
             if curr_node.coord == self.end.coord:
-                return self.draw_path_on_world(curr_node=curr_node)
+                return self.calculate_final_path(curr_node=curr_node)
               
             del self.open_set[curr_idx]
             self.closed_set[curr_idx] = curr_node
