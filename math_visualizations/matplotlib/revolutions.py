@@ -1,31 +1,47 @@
 from typing import Tuple
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.animation import FuncAnimation
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-p', '--phase_ratio', type=float, default=3.5,
+                    help="Ratio of drawing segment phase to main arm phase (irrational is better)")
+parser.add_argument('-d', '--dpi', type=int, default=96,
+                    help='Screen DPI')
+parser.add_argument('-x', '--x_resolution', type=int, default=800,
+                    help="Window X Resolution")
+parser.add_argument('-y', '--y_resolution', type=int, default=800,
+                    help="Window Y Resolution")
+parser.add_argument('--revolute_color', type=str, default="#333333",
+                    help="Revolute Color")
+parser.add_argument('--trace_color', type=str, default="#FFFFFF",
+                    help="Trace Color")
+args = parser.parse_args()
+
 # CONSTANTS
-DPI = 96                            # MONITOR DPI
-DIM1 = 800/DPI                      # X DIMENSION (Pixels)
-DIM2 = 800/DPI                      # Y DIMENSION (Pixels)
+DPI = int(args.dpi)                 # MONITOR DPI
+DIM1 = int(args.x_resolution/DPI)   # X DIMENSION (Pixels)
+DIM2 = int(args.y_resolution/DPI)   # Y DIMENSION (Pixels)
 MAIN_LINE_LENGTH = int(DIM1 / 2)    # Main Revolute Radius
-SUB_LINE_LENGTH = int(DIM1 / 2.5)  # Secondary Revolute Radii
+SUB_LINE_LENGTH = int(DIM1 / 2.5)   # Secondary Revolute Radii
 ANGLE1_INIT = 2/3 * np.pi           # Secondary Revolute Starting Angle
 ANGLE2_INIT = 2*np.pi               # Secondary Revolute Starting Angle
-ANGLE3_INIT = 300/90*np.pi          # Secondary Revolute Starting Angle
+ANGLE3_INIT = -2/3*np.pi            # Secondary Revolute Starting Angle
 REVOLUTION = 2*np.pi                # One Revolution (2pi Radians)
-ITERATIONS = 4                      # Number of Revolutions for Animation
+PHASE = float(args.phase_ratio)     # Ratio of phase
+ITERATIONS = int(np.ceil(PHASE*3))  # Number of Revolutions for Animation
 
 # Line width and color definitions
 WIDTH1 = 3
 WIDTH2 = 2.5
-COLOR1 = "#333333"
-COLOR2 = "#FFFFFF"
+COLOR1 = str(args.revolute_color)
+COLOR2 = str(args.trace_color)
 
 # Plt Configuration
 plt.style.use('dark_background')
 fig, ax = plt.subplots(figsize=(DIM2, DIM1))
-
 
 class Animation:
     """
@@ -120,7 +136,7 @@ class Animation:
 #       Irrational multiples result in out of phase
 #       rotation (which is way cooler)
 theta1 = np.linspace(0, ITERATIONS*REVOLUTION, 360*ITERATIONS)
-theta2 = np.linspace(0, ITERATIONS*REVOLUTION*3.25, 360*ITERATIONS)
+theta2 = np.linspace(0, ITERATIONS*REVOLUTION*PHASE, 360*ITERATIONS)
 thetas = [(t1, t2) for t1, t2 in zip(theta1, theta2)]
 
 a = Animation(ax)
