@@ -202,6 +202,10 @@ def main():
     # Generate world (grid)
     world = grid((X_DIM, Y_DIM), obstacles=OBSTACLES)
     
+    # UNCOMMENT BELOW FOR A CUSTOM (NON_RANDOM)
+    # WORLD. MODIFY AS FIT
+    #P0 = (2, 2)
+    #Pn = (62, 62)
     #world = np.zeros(shape=(X_DIM, Y_DIM), dtype=np.int8)
     #world[0:48, 20] = 1
     #world[23:X_DIM, 38] = 1

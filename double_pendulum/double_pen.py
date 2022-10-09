@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from collections import deque
 
+plt.style.use('dark_background')
+
 G = 9.81  # acceleration due to gravity, in m/s^2
 L1 = 1  # length of pendulum 1 in m
 L2 = 1  # length of pendulum 2 in m
@@ -59,10 +61,6 @@ y[0] = state
 for i in range(1, len(t)):
     y[i] = y[i - 1] + derivs(y[i - 1]) * dt
 
-# A more accurate estimate could be obtained e.g. using scipy:
-#
-#   y = scipy.integrate.solve_ivp(derivs, t[[0, -1]], state, t_eval=t).y.T
-
 x1 = L1*sin(y[:, 0])
 y1 = -L1*cos(y[:, 0])
 
@@ -73,12 +71,21 @@ fig = plt.figure(figsize=(10, 10))
 ax = fig.add_subplot(autoscale_on=False, xlim=(-L, L), ylim=(-L, L))
 ax.set_aspect('equal')
 
-line, = ax.plot([], [], '#2E3440', lw=3)
-trace, = ax.plot([], [], '#B48EAD', linestyle='-.', lw=2, ms=2)
+line, = ax.plot([], [], '#A3BE8C', lw=3)
+mass1 = ax.scatter([x1], [y1], c='#A3BE8C', lw=5)
+mass2 = ax.scatter([x2], [y2], c='#A3BE8C', lw=5)
+trace, = ax.plot([], [], '#FFFFFF', linestyle='-.', lw=2, ms=2)
 time_template = 'time = %.1fs'
-time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+time_text = ax.text(0.05, 0.96, '', transform=ax.transAxes)
 history_x, history_y = deque(maxlen=history_len), deque(maxlen=history_len)
-
+ax.text(0.05, 0.94, f"length 1: {L1}", transform=ax.transAxes)
+ax.text(0.05, 0.92, f"length 2: {L2}", transform=ax.transAxes)
+ax.text(0.05, 0.90, f"mass 1: {M1}", transform=ax.transAxes)
+ax.text(0.05, 0.88, f"mass 2: {M2}", transform=ax.transAxes)
+ax.text(0.05, 0.86, f"angle 1: {th1} degrees", transform=ax.transAxes)
+ax.text(0.05, 0.84, f"angle 2: {th2} degrees", transform=ax.transAxes)
+ax.tick_params(axis='both', colors='black')
+ax.set_title("Double Pendulum Animation", fontsize=20)
 
 def animate(i):
     thisx = [0, x1[i], x2[i]]
@@ -92,9 +99,11 @@ def animate(i):
     history_y.appendleft(thisy[2])
 
     line.set_data(thisx, thisy)
+    mass1.set_offsets([x1[i], y1[i]])
+    mass2.set_offsets([x2[i], y2[i]])
     trace.set_data(history_x, history_y)
     time_text.set_text(time_template % (i*dt))
-    return line, trace, time_text
+    return line, mass1, mass2, trace, time_text
 
 
 ani = animation.FuncAnimation(
