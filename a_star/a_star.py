@@ -96,8 +96,8 @@ class AStar:
         return None
             
     
-    def draw_path_on_world(self,
-                           curr_node: Node) -> np.ndarray:
+    def calculate_final_path(self,
+                             curr_node: Node) -> np.ndarray:
         total_path = [curr_node.coord]
         while curr_node.prev_node != -1:
             curr_node = curr_node.prev_node
