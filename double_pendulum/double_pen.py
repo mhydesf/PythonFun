@@ -1,21 +1,49 @@
+import argparse
 import random
 from numpy import sin, cos
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from collections import deque
-
 plt.style.use('dark_background')
 
-G = 9.81  # acceleration due to gravity, in m/s^2
-L1 = 1  # length of pendulum 1 in m
-L2 = 1  # length of pendulum 2 in m
-L = L1 + L2  # maximal length of the combined pendulum
-M1 = 1.0  # mass of pendulum 1 in kg
-M2 = 1.0  # mass of pendulum 2 in kg
-t_stop = 60  # how many seconds to simulate
+parser = argparse.ArgumentParser()
+parser.add_argument('--length_1', type=float, default=1.0,
+                    help="Length of first pendulum arm")
+parser.add_argument('--length_2', type=float, default=1.0,
+                    help="Length of second penulum arm")
+parser.add_argument('--mass_1', type=float, default=1.0,
+                    help="Mass of pendulum 1")
+parser.add_argument('--mass_2', type=float, default=1.0,
+                    help="Mass of pendulum 2")
+parser.add_argument('--theta_1', type=float, default=None,
+                    help="Initial angle of pendulum 1 (random by default)")
+parser.add_argument('--theta_2', type=float, default=None,
+                    help="Initial angle of pendulum 2 (random by default)")
+args = parser.parse_args()
+
+G = 9.81
+L1 = args.length_1
+L2 = args.length_2
+L = L1 + L2
+M1 = args.mass_1
+M2 = args.mass_2
+
+if args.theta_1 is None:
+    th1 = random.randint(-90, 90)
+else:
+    th1 = args.theta_1
+
+if args.theta_2 is None:
+    th2 = random.randint(-120, 120)
+else:
+    th2 = args.theta_2
+
+w1 = 0.0
+w2 = 0.0
+t_stop = 60
 dt = 0.01
-history_len = int(t_stop/dt)  # how many trajectory points to display
+history_len = int(t_stop/dt)
 
 
 def derivs(state):
@@ -44,13 +72,6 @@ def derivs(state):
 
 # create a time array from 0..t_stop sampled at 0.02 second steps
 t = np.arange(0, t_stop, dt)
-
-# th1 and th2 are the initial angles (degrees)
-# w10 and w20 are the initial angular velocities (degrees per second)
-th1 = random.randint(-90, 90)
-w1 = 0.0
-th2 = random.randint(-120, 120)
-w2 = 0.0
 
 # initial state
 state = np.radians([th1, w1, th2, w2])
@@ -82,8 +103,8 @@ ax.text(0.05, 0.94, f"length 1: {L1}", transform=ax.transAxes)
 ax.text(0.05, 0.92, f"length 2: {L2}", transform=ax.transAxes)
 ax.text(0.05, 0.90, f"mass 1: {M1}", transform=ax.transAxes)
 ax.text(0.05, 0.88, f"mass 2: {M2}", transform=ax.transAxes)
-ax.text(0.05, 0.86, f"angle 1: {th1} degrees", transform=ax.transAxes)
-ax.text(0.05, 0.84, f"angle 2: {th2} degrees", transform=ax.transAxes)
+ax.text(0.05, 0.86, f"angle 1: {th1}", transform=ax.transAxes)
+ax.text(0.05, 0.84, f"angle 2: {th2}", transform=ax.transAxes)
 ax.tick_params(axis='both', colors='black')
 ax.set_title("Double Pendulum Animation", fontsize=20)
 
