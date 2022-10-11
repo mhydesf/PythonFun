@@ -3,7 +3,6 @@ import argparse
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-from matplotlib import colors
 from random import randint
 
 
