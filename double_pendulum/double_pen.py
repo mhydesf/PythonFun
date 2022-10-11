@@ -7,7 +7,9 @@ import matplotlib.animation as animation
 from collections import deque
 plt.style.use('dark_background')
 
-parser = argparse.ArgumentParser()
+DESCRIPTION = "Visualization of a double pendulum path"
+
+parser = argparse.ArgumentParser(description=DESCRIPTION)
 parser.add_argument('--length_1', type=float, default=1.0,
                     help="Length of first pendulum arm")
 parser.add_argument('--length_2', type=float, default=1.0,

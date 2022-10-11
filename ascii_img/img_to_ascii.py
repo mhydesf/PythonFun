@@ -39,7 +39,9 @@ def crop_img(img: np.ndarray,
 
 if __name__ == "__main__":
     
-    parser = argparse.ArgumentParser()
+    DESCRIPTION="Conversion of a pixel image into an image of ASCII characters"
+    
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument('input')
     parser.add_argument('-o', '--output', default=None)
     parser.add_argument('-r', '--ratio', default=1)

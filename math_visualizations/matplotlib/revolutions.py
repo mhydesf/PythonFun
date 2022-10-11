@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from matplotlib.animation import FuncAnimation
 
-parser = argparse.ArgumentParser()
+DESCRIPTION = "Visualization of a set of interesting revolving points"
+
+parser = argparse.ArgumentParser(description=DESCRIPTION)
 parser.add_argument('-p', '--phase_ratio', type=float, default=3.5,
                     help="Ratio of drawing segment phase to main arm phase (irrational is better)")
 parser.add_argument('-d', '--dpi', type=int, default=96,

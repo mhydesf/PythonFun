@@ -165,7 +165,7 @@ def grid_to_obstacle_list(grid: np.ndarray) -> Tuple[List[int], List[int]]:
 
 def main():
     
-    DESCRIPTION = "A Star Algorithm Visualization Program"
+    DESCRIPTION = "A Star Algorithm Visualization Program. Finding the best path."
     
     # Load script arguments
     parser = argparse.ArgumentParser(description=DESCRIPTION)
