@@ -1,21 +1,22 @@
 import numpy as np
+from random import randint
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 plt.style.use('dark_background')
 
-STEP = 200.0
-MULTI = 2
+STEP = 200
+MULTI = 34
 RADIUS = 1
 DIM = 12
 
-th = np.arange(0.0, 2*np.pi, 0.01)
-po = np.array([(RADIUS*np.cos(t), RADIUS*np.sin(t)) for t in th])
+COLOR1 = "#%06x" % randint(0, 0xFFFFFF)
+COLOR2 = "#%06x" % randint(0, 0xFFFFFF)
+
 theta = np.arange(0.0, 2*np.pi, 2*np.pi/STEP, dtype=np.float16)
 coords = np.array([(RADIUS*np.cos(t), RADIUS*np.sin(t)) for t in theta])
 
 fig, ax = plt.subplots(figsize=(DIM, DIM))
-ax.scatter(*zip(*po), color='w', lw=1)
-ax.scatter(*zip(*coords), c='r', lw=2)
+ax.scatter(*zip(*coords), c=COLOR1, lw=2)
 
 def calc_idx(idx):
     if idx > len(coords) - 1:
@@ -26,12 +27,14 @@ def animate(idx):
     i0 = calc_idx(idx + 1)
     i1 = calc_idx((idx + 1) * MULTI)
     
-    x = [coords[i0][0], coords[i1][0]]
-    y = [coords[i0][1], coords[i1][1]]
+    x0, y0 = coords[i0]
+    x1, y1 = coords[i1]
+    x = [x0, x1]
+    y = [y0, y1]
     
-    ax.plot(x, y)
+    ax.plot(x, y, c=COLOR2)
 
-anim = FuncAnimation(fig, animate, frames=1000, repeat=True, interval=0.0)
+anim = FuncAnimation(fig, animate, frames=STEP*5, repeat=False, interval=0.0)
 
 ax.set_aspect(1)
 lim = 1.10*RADIUS
